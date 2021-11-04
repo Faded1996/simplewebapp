@@ -1,10 +1,7 @@
-### Practical task
+### Минутку внимания
 
-Using the provided skeleton, implement the REST service.
-
-Useful link: https://spring.io/guides/gs/rest-service/
-
-In addition you could use Swagger to provide API documentation.
+Вместо PostgreSQL использовал MySQL, т.к. эта СУБД была уже установлена и настроена.<br>
+Надеюсь это не было принцпиальным вопросом в этом задании.
         
         
   
