@@ -2,7 +2,11 @@ package com.mastery.java.task.rest;
 
 import com.mastery.java.task.dto.Employee;
 import com.mastery.java.task.service.EmployeeService;
+import net.kaczmarzyk.spring.data.jpa.domain.Like;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,10 +43,15 @@ public class EmployeeController {
         employeeService.updateEmployeeById(employee, id);
     }
 
+    @GetMapping(params = {"firstName", "lastName" })
+    public List<Employee> searchEmployeeByFirstNameOrLastName(
+            @And({
+                    @Spec(path = "firstName", params = "firstName", spec = Like.class),
+                    @Spec(path = "lastName", params = "lastName", spec = Like.class)
+            }) Specification<Employee> specification) {
 
-
-
-
+        return employeeService.getAllEmployees(specification);
+    }
 
 
 }

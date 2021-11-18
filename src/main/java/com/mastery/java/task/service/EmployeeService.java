@@ -4,6 +4,8 @@ import com.mastery.java.task.dto.Employee;
 import com.mastery.java.task.repository.EmployeeRepository;
 import com.mastery.java.task.exceptions.NonExistentEmployeeException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,11 @@ public class EmployeeService {
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
+
+
+    public List<Employee> getAllEmployees(Specification<Employee> specification){
+        return employeeRepository.findAll(specification);
+    };
 
     public Employee getEmployeeById(Long id) {
         Optional<Employee> employeeById = employeeRepository.findById(id);

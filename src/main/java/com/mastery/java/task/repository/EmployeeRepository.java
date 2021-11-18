@@ -2,16 +2,11 @@ package com.mastery.java.task.repository;
 
 import com.mastery.java.task.dto.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-
-     List<Employee> findByFirstNameContainingIgnoreCase(String firstName);
-
-     List<Employee> findByLastNameContainingIgnoreCase(String lastName);
+public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSpecificationExecutor<Employee>{
 
 
 }
