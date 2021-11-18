@@ -1,20 +1,25 @@
 package com.mastery.java.task.dto;
 
+import javax.persistence.*;
+
+@Entity
 public class Employee {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long employeeId;
     private String firstName;
     private String lastName;
     private Long departmentId;
     private String jobTitle;
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     public Employee() {
     }
 
-    public Employee(Long employeeId, String firstName, String lastName, Long departmentId, String jobTitle,
+    public Employee(String firstName, String lastName, Long departmentId, String jobTitle,
                     Gender gender) {
-        this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.departmentId = departmentId;
