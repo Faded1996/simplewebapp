@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 @Aspect
 @Component
 public class EmployeeLoggingAspect {
@@ -20,23 +22,28 @@ public class EmployeeLoggingAspect {
 
     }
 
+    @Pointcut("execution(* com.mastery.java.task.annotation.*.* (..))")
+    private void methodsFromAnnotationPackage() {
+    }
+
+
     @Pointcut("execution(* com.mastery.java.task.*.*.* (..))")
     private void allMethods() {
     }
 
-    @Around("allMethods() && !methodsFromExceptionsPackage()")
+    @Around("allMethods() && !methodsFromExceptionsPackage() && !methodsFromAnnotationPackage()")
     public Object logApplicationMethods(ProceedingJoinPoint joinPoint) throws Throwable {
-        ObjectMapper objectMapper = new ObjectMapper();
+//        ObjectMapper objectMapper = new ObjectMapper();
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getTarget().getClass().toString();
         Object[] methodArgs = joinPoint.getArgs();
 
         LOGGER.debug("Method invoked " + className + " : " + methodName + "()" + " with args : " +
-                objectMapper.writeValueAsString(methodArgs));
+                Arrays.toString(methodArgs));
 
         Object result = joinPoint.proceed();
 
-        LOGGER.debug(className + " : " + methodName + "()" + " Response:" + objectMapper.writeValueAsString(result));
+        LOGGER.debug(className + " : " + methodName + "()" + " Response:" + Arrays.toString(methodArgs));
 
         return result;
     }

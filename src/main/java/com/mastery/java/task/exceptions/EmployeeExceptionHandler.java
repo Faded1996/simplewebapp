@@ -30,7 +30,8 @@ public class EmployeeExceptionHandler {
     public ResponseEntity<EmployeeIncorrectData> handleEmployeeServiceBadRequests(Exception e) {
         EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
         employeeIncorrectData.setInfo(e.getMessage());
-        LOGGER.error(e.getClass() + " : " + e.getMessage());
+        LOGGER.warn(e.getClass() + " : " + e.getMessage());
+        e.printStackTrace();
         return new ResponseEntity<>(employeeIncorrectData, HttpStatus.BAD_REQUEST);
     }
 
@@ -44,7 +45,7 @@ public class EmployeeExceptionHandler {
             errors.put(fieldName, errorMessage);
 
         });
-        LOGGER.error(errors.toString());
+        LOGGER.error("Validation error: " + errors.toString());
         EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
         employeeIncorrectData.setInfo(errors.toString());
         return new ResponseEntity<>(employeeIncorrectData, HttpStatus.BAD_REQUEST);

@@ -6,9 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -29,12 +31,11 @@ public class Employee {
     @Pattern(regexp = "[a-zA-Z]{2,}", message = "last name must have at least 2 letters")
     private String lastName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd")
-    @Temporal(TemporalType.DATE)
-    //@Adult checks whether employee is at least 18 y.o.
-    @Adult
 
-    private Date birthday;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    //@Adult checks whether employee is at least 18 y.o.
+    @Adult(message = "employee should be at least 18 y.o.")
+    private LocalDate birthday;
 
 
     @Min(value = 1, message = "department Id can't be less than 1")
