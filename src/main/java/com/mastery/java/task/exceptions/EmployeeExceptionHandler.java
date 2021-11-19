@@ -31,7 +31,7 @@ public class EmployeeExceptionHandler {
         EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
         employeeIncorrectData.setInfo(e.getMessage());
         LOGGER.warn(e.getClass() + " : " + e.getMessage());
-        e.printStackTrace();
+//        e.printStackTrace();
         return new ResponseEntity<>(employeeIncorrectData, HttpStatus.BAD_REQUEST);
     }
 
@@ -48,6 +48,6 @@ public class EmployeeExceptionHandler {
         LOGGER.error("Validation error: " + errors.toString());
         EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
         employeeIncorrectData.setInfo(errors.toString());
-        return new ResponseEntity<>(employeeIncorrectData, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(employeeIncorrectData, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 }
