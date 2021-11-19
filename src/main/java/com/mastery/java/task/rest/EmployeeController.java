@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -31,7 +32,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public void addEmployee(@RequestBody Employee employee) {
+    public void addEmployee(@Valid @RequestBody Employee employee) {
         employeeService.addEmployee(employee);
     }
 
@@ -41,7 +42,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public void updateEmployeeById(@RequestBody Employee employee, @PathVariable Long id) {
+    public void updateEmployeeById(@Valid @RequestBody Employee employee, @PathVariable Long id) {
         employeeService.updateEmployeeById(employee, id);
     }
 
