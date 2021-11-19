@@ -3,7 +3,7 @@ package com.mastery.java.task.service;
 
 import com.mastery.java.task.dto.Employee;
 import com.mastery.java.task.dto.Gender;
-import com.mastery.java.task.exceptions.NonExistentEmployeeException;
+import com.mastery.java.task.exceptions.EmployeeServiceNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -56,8 +56,8 @@ public class EmployeeServiceTest {
         Long employeeId = 1L;
        Mockito.when(employeeDao.getEmployeeById(employeeId)).thenReturn(null);
 
-        NonExistentEmployeeException thrownException =
-                Assertions.assertThrows(NonExistentEmployeeException.class, () -> {
+        EmployeeServiceNotFoundException thrownException =
+                Assertions.assertThrows(EmployeeServiceNotFoundException.class, () -> {
                     employeeService.getEmployeeById(employeeId);
                 });
         Assertions.assertEquals("Employee with id = 1 doesn't exist in DB", thrownException.getMessage());
@@ -85,7 +85,7 @@ public class EmployeeServiceTest {
     public void deleteEmployeeByIdShouldThrowExceptionWhenEmployeeNotExists() {
         Long employeeId = 1L;
        Mockito.when(employeeDao.getEmployeeById(employeeId)).thenReturn(null);
-        Assertions.assertThrows(NonExistentEmployeeException.class, () -> {
+        Assertions.assertThrows(EmployeeServiceNotFoundException.class, () -> {
             employeeService.deleteEmployeeById(employeeId);
         });
     }
@@ -111,7 +111,7 @@ public class EmployeeServiceTest {
         Employee newEmployee = new Employee(employeeId, "Vasya", "Pupkin", 99L, "HR",
                 Gender.MALE);
        Mockito.when(employeeDao.getEmployeeById(employeeId)).thenReturn(null);
-        Assertions.assertThrows(NonExistentEmployeeException.class, () -> {
+        Assertions.assertThrows(EmployeeServiceNotFoundException.class, () -> {
             employeeService.updateEmployeeById(newEmployee, employeeId);
         });
 

@@ -5,6 +5,8 @@ import com.mastery.java.task.service.EmployeeService;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +46,7 @@ public class EmployeeController {
     }
 
     @GetMapping(params = {"firstName", "lastName" })
-    public List<Employee> searchEmployeeByFirstNameOrLastName(
+    public List<Employee> searchEmployeeByFirstNameAndLastName(
             @And({
                     @Spec(path = "firstName", params = "firstName", spec = Like.class),
                     @Spec(path = "lastName", params = "lastName", spec = Like.class)
