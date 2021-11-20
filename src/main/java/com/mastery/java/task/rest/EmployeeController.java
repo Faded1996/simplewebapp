@@ -2,6 +2,7 @@ package com.mastery.java.task.rest;
 
 import com.mastery.java.task.dto.Employee;
 import com.mastery.java.task.service.EmployeeService;
+import io.swagger.annotations.ApiOperation;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
@@ -19,27 +20,32 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping
+    @GetMapping("/")
+    @ApiOperation(value = "Find all employees")
     public List<Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
     @GetMapping("/{id}")
+    @ApiOperation(value = "Find employee by Id", notes = "Provide valid Id")
     public Employee getEmployeeById(@PathVariable Long id) {
         return employeeService.getEmployeeById(id);
     }
 
-    @PostMapping
+    @PostMapping("/")
+    @ApiOperation(value = "Add employee", notes = "Provide valid employee")
     public void addEmployee(@Valid @RequestBody Employee employee) {
         employeeService.addEmployee(employee);
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "Delete employee by Id", notes = "Provide valid Id")
     public void deleteEmployeeById(@PathVariable Long id) {
         employeeService.deleteEmployeeById(id);
     }
 
     @PutMapping("/{id}")
+    @ApiOperation(value = "Update employee by Id", notes = "Provide valid employee and Id")
     public void updateEmployeeById(@Valid @RequestBody Employee employee, @PathVariable Long id) {
         employeeService.updateEmployeeById(employee, id);
     }
@@ -47,6 +53,8 @@ public class EmployeeController {
 //Because of that this method is not showing in Swagger UI
 //That's why I added "/search" to the path. I don't know if it's the right thing to do though.
     @GetMapping(path = "/search", params = {"firstName", "lastName" })
+    @ApiOperation(value = "Search for employee by first name and last name", notes = "Provide full name or part of " +
+            "the name")
     public List<Employee> searchEmployeeByFirstNameAndLastName(
             @And({
                     @Spec(path = "firstName", params = "firstName", spec = Like.class),
