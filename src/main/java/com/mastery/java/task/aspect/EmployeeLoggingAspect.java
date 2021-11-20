@@ -1,6 +1,5 @@
 package com.mastery.java.task.aspect;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -22,28 +21,21 @@ public class EmployeeLoggingAspect {
 
     }
 
-    @Pointcut("execution(* com.mastery.java.task.annotation.*.* (..))")
-    private void methodsFromAnnotationPackage() {
-    }
-
-
     @Pointcut("execution(* com.mastery.java.task.*.*.* (..))")
     private void allMethods() {
     }
 
-    @Around("allMethods() && !methodsFromExceptionsPackage() && !methodsFromAnnotationPackage()")
+    @Around("allMethods() && !methodsFromExceptionsPackage()")
     public Object logApplicationMethods(ProceedingJoinPoint joinPoint) throws Throwable {
-//        ObjectMapper objectMapper = new ObjectMapper();
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getTarget().getClass().toString();
         Object[] methodArgs = joinPoint.getArgs();
 
-        LOGGER.debug("Method invoked " + className + " : " + methodName + "()" + " with args : " +
-                Arrays.toString(methodArgs));
+        LOGGER.debug("Method invoked: {}:{}() with args: {}", className, methodName, Arrays.toString(methodArgs));
 
         Object result = joinPoint.proceed();
 
-        LOGGER.debug(className + " : " + methodName + "()" + " Response:" + Arrays.toString(methodArgs));
+        LOGGER.debug("Method {}:{}() Response: {}", className, methodName, Arrays.toString(methodArgs));
 
         return result;
     }

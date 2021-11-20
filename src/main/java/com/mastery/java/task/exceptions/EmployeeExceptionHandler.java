@@ -22,17 +22,8 @@ public class EmployeeExceptionHandler {
             EmployeeServiceNotFoundException e) {
         EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
         employeeIncorrectData.setInfo(e.getMessage());
-        LOGGER.error(e.getClass() + " : " + e.getMessage());
-        return new ResponseEntity<>(employeeIncorrectData, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<EmployeeIncorrectData> handleEmployeeServiceBadRequests(Exception e) {
-        EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
-        employeeIncorrectData.setInfo(e.getMessage());
         LOGGER.warn(e.getClass() + " : " + e.getMessage());
-//        e.printStackTrace();
-        return new ResponseEntity<>(employeeIncorrectData, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(employeeIncorrectData, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
@@ -43,11 +34,20 @@ public class EmployeeExceptionHandler {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
-
         });
-        LOGGER.error("Validation error: " + errors.toString());
+        LOGGER.warn("Validation error: " + errors);
         EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
         employeeIncorrectData.setInfo(errors.toString());
         return new ResponseEntity<>(employeeIncorrectData, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+//This handler basically handles any other exception (which I guess not the way it should be)
+    @ExceptionHandler
+    public ResponseEntity<EmployeeIncorrectData> handleEmployeeServiceBadRequests(Exception e) {
+        EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
+        employeeIncorrectData.setInfo(e.getMessage());
+        LOGGER.warn(e.getClass() + " : " + e.getMessage());
+//        e.printStackTrace();
+        return new ResponseEntity<>(employeeIncorrectData, HttpStatus.BAD_REQUEST);
     }
 }

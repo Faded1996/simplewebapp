@@ -5,8 +5,6 @@ import com.mastery.java.task.service.EmployeeService;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +43,10 @@ public class EmployeeController {
     public void updateEmployeeById(@Valid @RequestBody Employee employee, @PathVariable Long id) {
         employeeService.updateEmployeeById(employee, id);
     }
-
-    @GetMapping(params = {"firstName", "lastName" })
+//Turns out that two GET or two POST methods for the same path are not allowed – even if they have different parameters
+//Because of that this method is not showing in Swagger UI
+//That's why I added "/search" to the path. I don't know if it's the right thing to do though.
+    @GetMapping(path = "/search", params = {"firstName", "lastName" })
     public List<Employee> searchEmployeeByFirstNameAndLastName(
             @And({
                     @Spec(path = "firstName", params = "firstName", spec = Like.class),
