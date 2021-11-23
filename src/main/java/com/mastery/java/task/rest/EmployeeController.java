@@ -27,6 +27,7 @@ public class EmployeeController {
     @GetMapping(value = "/")
     @ApiOperation(value = "Find all employees or search by first name and/or by last name")
     @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
     public List<Employee> getAllEmployees(
@@ -41,6 +42,7 @@ public class EmployeeController {
     @GetMapping("/{id}")
     @ApiOperation(value = "Find employee by Id", notes = "Provide valid Id")
     @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Internal server error")
@@ -55,6 +57,7 @@ public class EmployeeController {
     @PostMapping("/")
     @ApiOperation(value = "Add employee", notes = "Provide valid employee")
     @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
@@ -67,6 +70,7 @@ public class EmployeeController {
 
     @DeleteMapping("/{id}")
     @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Internal server error")
@@ -81,6 +85,7 @@ public class EmployeeController {
     @PutMapping("/{id}")
     @ApiOperation(value = "Update employee by Id", notes = "Provide valid employee and Id")
     @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Internal server error")
