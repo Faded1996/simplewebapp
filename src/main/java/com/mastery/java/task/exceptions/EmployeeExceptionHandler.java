@@ -1,7 +1,6 @@
 package com.mastery.java.task.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -26,7 +25,7 @@ public class EmployeeExceptionHandler {
         EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
         employeeIncorrectData.setInfo(e.getMessage());
 
-        String stackTraceAsString = convertExceptionStackTraceToReadableString(e);
+        String stackTraceAsString = getReadableStackTraceFromException(e);
         log.error(stackTraceAsString);
         return employeeIncorrectData;
     }
@@ -44,7 +43,7 @@ public class EmployeeExceptionHandler {
         EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
         employeeIncorrectData.setInfo(errors.toString());
 
-        String stackTraceAsString = convertExceptionStackTraceToReadableString(e);
+        String stackTraceAsString = getReadableStackTraceFromException(e);
         log.error("Validation error: {}", stackTraceAsString);
         return employeeIncorrectData;
     }
@@ -55,7 +54,7 @@ public class EmployeeExceptionHandler {
         EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
         employeeIncorrectData.setInfo(e.getMessage());
 
-        String stackTraceAsString = convertExceptionStackTraceToReadableString(e);
+        String stackTraceAsString = getReadableStackTraceFromException(e);
         log.error("URL parameter validation error: {}", stackTraceAsString);
         return employeeIncorrectData;
     }
@@ -66,12 +65,12 @@ public class EmployeeExceptionHandler {
         EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
         employeeIncorrectData.setInfo(e.getMessage());
 
-        String stackTraceAsString = convertExceptionStackTraceToReadableString(e);
+        String stackTraceAsString = getReadableStackTraceFromException(e);
         log.error(stackTraceAsString);
         return employeeIncorrectData;
     }
 
-    private String convertExceptionStackTraceToReadableString(Exception e) {
+    private String getReadableStackTraceFromException(Exception e) {
         StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw));
         return sw.toString();
