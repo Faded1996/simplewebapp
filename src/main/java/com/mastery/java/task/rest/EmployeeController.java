@@ -90,7 +90,7 @@ public class EmployeeController {
             @ApiResponse(code = 404, message = "Not found"),
             @ApiResponse(code = 500, message = "Internal server error")
     })
-    public void updateEmployeeById(@Valid @RequestBody Employee employee, @PathVariable Long id) {
+    public void updateEmployeeById(@Valid @RequestBody Employee employee, @PathVariable @Min(1) Long id) {
         log.info("IN: updateEmployeeById() - {},{}", employee, id);
         employeeService.updateEmployeeById(employee, id);
         log.info("OUT: updateEmployeeById() - employee with id={} was successfully updated", id);
