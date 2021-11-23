@@ -3,66 +3,92 @@ package com.mastery.java.task.rest;
 import com.mastery.java.task.dto.Employee;
 import com.mastery.java.task.service.EmployeeService;
 import io.swagger.annotations.ApiOperation;
-import net.kaczmarzyk.spring.data.jpa.domain.Like;
-import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
-import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @RestController
 @RequestMapping("/employees")
+@Slf4j
+@Validated
 public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping("/")
-    @ApiOperation(value = "Find all employees")
-    public List<Employee> getAllEmployees() {
-        return employeeService.getAllEmployees();
+    @GetMapping(value = "/")
+    @ApiOperation(value = "Find all employees or search by first name and/or by last name")
+    @ApiResponses({
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    public List<Employee> getAllEmployees(
+            @RequestParam(required = false) @Pattern(regexp = "[a-zA-Z]*") String firstName,
+            @RequestParam(required = false) @Pattern(regexp = "[a-zA-Z]*") String lastName) {
+        log.info("IN: getAllEmployees() - {},{}", firstName, lastName);
+        List<Employee> result = employeeService.getAllEmployees(firstName, lastName);
+        log.info("OUT: getAllEmployees() - employee list size={}", result.size());
+        return result;
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Find employee by Id", notes = "Provide valid Id")
-    public Employee getEmployeeById(@PathVariable Long id) {
-        return employeeService.getEmployeeById(id);
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
+    public Employee getEmployeeById(@PathVariable @Min(1) Long id) {
+        log.info("IN: getEmployeeById() - {}", id);
+        Employee result = employeeService.getEmployeeById(id);
+        log.info("OUT: getEmployeeById() - {}", result);
+        return result;
     }
 
     @PostMapping("/")
     @ApiOperation(value = "Add employee", notes = "Provide valid employee")
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public void addEmployee(@Valid @RequestBody Employee employee) {
+        log.info("IN addEmployee() - {}", employee);
         employeeService.addEmployee(employee);
+        log.info("OUT: addEmployee() - employee {} {} was successfully added", employee.getFirstName(),
+                employee.getLastName());
     }
 
     @DeleteMapping("/{id}")
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     @ApiOperation(value = "Delete employee by Id", notes = "Provide valid Id")
-    public void deleteEmployeeById(@PathVariable Long id) {
+    public void deleteEmployeeById(@PathVariable @Min(1) Long id) {
+        log.info("IN: deleteEmployeeById() - {}", id);
         employeeService.deleteEmployeeById(id);
+        log.info("OUT: deleteEmployeeById() - employee with id={} was successfully deleted", id);
     }
 
     @PutMapping("/{id}")
     @ApiOperation(value = "Update employee by Id", notes = "Provide valid employee and Id")
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Internal server error")
+    })
     public void updateEmployeeById(@Valid @RequestBody Employee employee, @PathVariable Long id) {
+        log.info("IN: updateEmployeeById() - {},{}", employee, id);
         employeeService.updateEmployeeById(employee, id);
+        log.info("OUT: updateEmployeeById() - employee with id={} was successfully updated", id);
     }
-//Turns out that two GET or two POST methods for the same path are not allowed – even if they have different parameters
-//Because of that this method is not showing in Swagger UI
-//That's why I added "/search" to the path. I don't know if it's the right thing to do though.
-    @GetMapping(path = "/search", params = {"firstName", "lastName" })
-    @ApiOperation(value = "Search for employee by first name and last name", notes = "Provide full name or part of " +
-            "the name")
-    public List<Employee> searchEmployeeByFirstNameAndLastName(
-            @And({
-                    @Spec(path = "firstName", params = "firstName", spec = Like.class),
-                    @Spec(path = "lastName", params = "lastName", spec = Like.class)
-            }) Specification<Employee> specification) {
-
-        return employeeService.getAllEmployees(specification);
-    }
-
 
 }

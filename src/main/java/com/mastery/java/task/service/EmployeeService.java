@@ -4,11 +4,11 @@ import com.mastery.java.task.dto.Employee;
 import com.mastery.java.task.exceptions.EmployeeServiceNotFoundException;
 import com.mastery.java.task.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class EmployeeService {
@@ -21,14 +21,11 @@ public class EmployeeService {
     }
 
 
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    public List<Employee> getAllEmployees(String firstName, String lastName) {
+        firstName = firstName == null ? "" : firstName;
+        lastName = lastName == null ? "" : lastName;
+        return employeeRepository.findByFirstNameContainingAndLastNameContaining(firstName, lastName);
     }
-
-
-    public List<Employee> getAllEmployees(Specification<Employee> specification){
-        return employeeRepository.findAll(specification);
-    };
 
     public Employee getEmployeeById(Long id) {
         Optional<Employee> employeeById = employeeRepository.findById(id);
@@ -63,8 +60,6 @@ public class EmployeeService {
         }
 
     }
-
-
 
 
 }
