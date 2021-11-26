@@ -5,8 +5,8 @@ import com.mastery.java.task.service.EmployeeService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +19,9 @@ import java.util.List;
 @RequestMapping("/employees")
 @Slf4j
 @Validated
+@AllArgsConstructor
 public class EmployeeController {
 
-    @Autowired
     private EmployeeService employeeService;
 
     @GetMapping(value = "/")
@@ -31,8 +31,8 @@ public class EmployeeController {
             @ApiResponse(code = 500, message = "Internal server error")
     })
     public List<Employee> getAllEmployees(
-            @RequestParam(required = false) @Pattern(regexp = "[a-zA-Z]*") String firstName,
-            @RequestParam(required = false) @Pattern(regexp = "[a-zA-Z]*") String lastName) {
+            @RequestParam(required = false, defaultValue = "") @Pattern(regexp = "[a-zA-Z]*") String firstName,
+            @RequestParam(required = false, defaultValue = "") @Pattern(regexp = "[a-zA-Z]*") String lastName) {
         log.info("IN: getAllEmployees() - {},{}", firstName, lastName);
         List<Employee> result = employeeService.getAllEmployees(firstName, lastName);
         log.info("OUT: getAllEmployees() - employee list size={}", result.size());

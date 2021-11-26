@@ -3,7 +3,7 @@ package com.mastery.java.task.service;
 import com.mastery.java.task.dto.Employee;
 import com.mastery.java.task.exceptions.EmployeeServiceNotFoundException;
 import com.mastery.java.task.repository.EmployeeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,19 +11,12 @@ import java.util.Optional;
 
 
 @Service
+@AllArgsConstructor
 public class EmployeeService {
 
     private EmployeeRepository employeeRepository;
 
-    @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
-
-
     public List<Employee> getAllEmployees(String firstName, String lastName) {
-        firstName = firstName == null ? "" : firstName;
-        lastName = lastName == null ? "" : lastName;
         return employeeRepository.findByFirstNameContainingAndLastNameContaining(firstName, lastName);
     }
 

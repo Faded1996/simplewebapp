@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,9 +22,7 @@ public class EmployeeExceptionHandler {
             EmployeeServiceNotFoundException e) {
         EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
         employeeIncorrectData.setInfo(e.getMessage());
-
-        String stackTraceAsString = getReadableStackTraceFromException(e);
-        log.error(stackTraceAsString);
+        log.error(e.getMessage(), e);
         return employeeIncorrectData;
     }
 
@@ -42,9 +38,7 @@ public class EmployeeExceptionHandler {
         });
         EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
         employeeIncorrectData.setInfo(errors.toString());
-
-        String stackTraceAsString = getReadableStackTraceFromException(e);
-        log.error("Validation error: {}", stackTraceAsString);
+        log.error(e.getMessage(), e);
         return employeeIncorrectData;
     }
 
@@ -53,9 +47,7 @@ public class EmployeeExceptionHandler {
     public EmployeeIncorrectData handleConstraintViolationException(ConstraintViolationException e) {
         EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
         employeeIncorrectData.setInfo(e.getMessage());
-
-        String stackTraceAsString = getReadableStackTraceFromException(e);
-        log.error("URL parameter validation error: {}", stackTraceAsString);
+        log.error(e.getMessage(), e);
         return employeeIncorrectData;
     }
 
@@ -64,15 +56,8 @@ public class EmployeeExceptionHandler {
     public EmployeeIncorrectData handleEmployeeServiceBadRequests(Exception e) {
         EmployeeIncorrectData employeeIncorrectData = new EmployeeIncorrectData();
         employeeIncorrectData.setInfo(e.getMessage());
-
-        String stackTraceAsString = getReadableStackTraceFromException(e);
-        log.error(stackTraceAsString);
+        log.error(e.getMessage(), e);
         return employeeIncorrectData;
     }
 
-    private String getReadableStackTraceFromException(Exception e) {
-        StringWriter sw = new StringWriter();
-        e.printStackTrace(new PrintWriter(sw));
-        return sw.toString();
-    }
 }
