@@ -1,0 +1,21 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+                                  <!--THIS ONE IS FOR TRAINING ONLY-->
+                                  <!--THIS ONE IS FOR TRAINING ONLY-->
+                                  <!--THIS ONE IS FOR TRAINING ONLY-->
+                                  <!--THIS ONE IS FOR TRAINING ONLY-->
+
+    <changeSet id="id" author="me" >
+
+        <createTable tableName="employees">
+            <column name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>
