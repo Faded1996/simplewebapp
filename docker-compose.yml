@@ -17,10 +17,12 @@ services:
     depends_on:
       - postgres
       - activemq
+    environment:
+      SPRING_PROFILES_ACTIVE : docker
 
   activemq:
     image: rmohr/activemq
     ports:
       - '61616:61616'
-      - '8161:8161'
+
 
