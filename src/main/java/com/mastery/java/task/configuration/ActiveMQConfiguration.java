@@ -4,50 +4,42 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
-import javax.jms.Queue;
-
 @Configuration
 public class ActiveMQConfiguration {
 
-    @Value("${activemq.broker-url}")
-    private String brokerUrl;
 
     @Bean
-    public Queue queue() {
-        return new ActiveMQQueue("standalone.queue");
-    }
-
-    @Bean
-    public ActiveMQConnectionFactory activeMQConnectionFactory() {
+    public ActiveMQConnectionFactory activeMQConnectionFactory(
+            @Value("${activemq.broker-url}") final String brokerUrl) {
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory();
         factory.setBrokerURL(brokerUrl);
         return factory;
     }
 
 
-   /* @Bean
-    public JmsTemplate jmsTemplate() {
+    @Bean
+    public JmsTemplate jmsTemplate(final MessageConverter messageConverter, final ActiveMQConnectionFactory factory) {
         JmsTemplate jmsTemplate = new JmsTemplate();
-        jmsTemplate.setConnectionFactory(activeMQConnectionFactory());
-        jmsTemplate.setMessageConverter(messageConverter());
+        jmsTemplate.setConnectionFactory(factory);
+        jmsTemplate.setMessageConverter(messageConverter);
         return jmsTemplate;
-    }*/
+    }
 
 
     @Bean
-    public MessageConverter messageConverter() {
+    public MessageConverter messageConverter(final ObjectMapper objectMapper) {
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
         converter.setTargetType(MessageType.TEXT);
         converter.setTypeIdPropertyName("_type");
-        converter.setObjectMapper(objectMapper());
+        converter.setObjectMapper(objectMapper);
         return converter;
     }
 

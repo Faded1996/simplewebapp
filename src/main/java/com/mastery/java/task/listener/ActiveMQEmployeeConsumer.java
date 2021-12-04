@@ -14,7 +14,7 @@ public class ActiveMQEmployeeConsumer {
 
     private EmployeeRepository employeeRepository;
 
-    @JmsListener(destination = "standalone.queue")
+    @JmsListener(destination = "${activemq.queue-name}")
     public void consume(Employee employee) {
         log.info("IN: consume() - {}", employee);
         employeeRepository.save(employee);
